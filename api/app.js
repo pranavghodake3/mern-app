@@ -32,8 +32,6 @@ app.get('/tweets', (req, res)=>{
   // Tweet.find().lean().exec(function (err, tweets) {
   //   res.status(200).send(tweets);
   // });
-
-
   let tweets = [
     {
       id: 1,
