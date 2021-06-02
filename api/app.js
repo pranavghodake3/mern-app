@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 var cors = require('cors');
 const port = 9001;
-const connectionUrl = 'mongodb+srv://pranavghodake:Pranav123@cluster0.kadev.mongodb.net/pranav-twitter?retryWrites=true&w=majority';
+const connectionUrl = '';
 var TweetModel = require('./models/TweetModel');
 var UserModel = require('./models/UserModel');
 
