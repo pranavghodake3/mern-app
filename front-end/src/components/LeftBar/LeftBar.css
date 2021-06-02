@@ -1,0 +1,13 @@
+.logo-div{
+    padding-left: 200px;
+}
+.logo{
+    width: 50px;
+}
+ul.left-menus{
+    padding-left: 190px;
+}
+ul.left-menus li{
+    list-style: none;
+    margin: 20px;
+}

@@ -1,0 +1,10 @@
+.header-row{
+    height: 40px;
+}
+.header-row input.search{
+    margin-bottom: 0px;
+    height: 25px;
+}
+.container.app{
+    padding-top: 0px;
+}

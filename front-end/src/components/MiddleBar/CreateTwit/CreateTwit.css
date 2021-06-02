@@ -1,0 +1,13 @@
+.text-area-create-twit{
+    width: 100%;
+    border: 1px solid #fff;
+}
+.text-area-create-twit:focus{
+    outline: none;
+}
+.create-tweet-btn{
+    width: 69px;
+    float: right;
+    font-size: 13px;
+    padding: 2px;
+}
