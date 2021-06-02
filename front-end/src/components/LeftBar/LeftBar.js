@@ -1,5 +1,6 @@
 import React from 'react';
 import './LeftBar.css';
+import { Link } from "react-router-dom";
 
 class LeftBar extends React.Component{
     render(){
@@ -7,7 +8,7 @@ class LeftBar extends React.Component{
             <div>
                 <div>
                     <ul className="left-menus">
-                        <li>Home</li>
+                        <li><Link to="/login" className="nav-link">Login</Link></li>
                         <li>Explore</li>
                         <li>Notifications</li>
                         <li>Messages</li>

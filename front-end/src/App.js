@@ -11,32 +11,44 @@ import logo from './twitter-logo.jpg';
 class App extends Component {
   render() {
     return (
-      <div className="container app">
-        <div className="row header-row">
-          <div className="col-sm hor-column">
-              <div className="logo-div">
-                <img className='logo' src={logo} alt="logo" />
+      <Router>
+        <Switch>
+          <Route path="/">
+            <div className="container app">
+              <div className="row header-row">
+                <div className="col-sm hor-column">
+                    <div className="logo-div">
+                      <img className='logo' src={logo} alt="logo" />
+                    </div>
+                </div>
+                <div className="col-sm hor-column">
+                  Home
+                </div>
+                <div className="col-sm hor-column">
+                  <input type="text" className='search' placeholder='Search' />
+                </div>
               </div>
-          </div>
-          <div className="col-sm hor-column">
-            Home
-          </div>
-          <div className="col-sm hor-column">
-            <input type="text" className='search' placeholder='Search' />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm hor-column">
-            <LeftBar />
-          </div>
-          <div className="col-sm hor-column">
-            <MiddleBar />
-          </div>
-          <div className="col-sm hor-column">
-            <RightBar />
-          </div>
-        </div>
-      </div>
+              <div className="row">
+                <div className="col-sm hor-column">
+                  <LeftBar />
+                </div>
+                <div className="col-sm hor-column">
+                  <MiddleBar />
+                </div>
+                <div className="col-sm hor-column">
+                  <RightBar />
+                </div>
+              </div>
+            </div>
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/registration">
+            <Registration />
+          </Route>
+        </Switch>
+      </Router>
     );
   }
 }

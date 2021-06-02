@@ -5,7 +5,7 @@ const ObjectId = Schema.ObjectId;
 
 const TweetModelSchema = new Schema({
   content: String,
-  user: [{ type: Schema.Types.ObjectId, ref: 'UserModel' }],
+  user: { type: Schema.Types.ObjectId, ref: 'UserModel' },
   date: { type: Date, default: Date.now },
 });
 

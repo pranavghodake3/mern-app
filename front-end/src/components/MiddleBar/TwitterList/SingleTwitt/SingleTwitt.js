@@ -1,20 +1,46 @@
 import React, { Component } from 'react';
 import './SingleTwitt.css';
-import userProfile from './user-profile.png';
 
 class SingleTwitt extends Component {
     constructor(props) {
         super(props);
     }
     
+    timeAgoCalculate = (date) => {
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = seconds / 31536000;
+
+        if (interval > 1) {
+            return Math.floor(interval) + " years";
+        }
+        interval = seconds / 2592000;
+        if (interval > 1) {
+            return Math.floor(interval) + " months";
+        }
+        interval = seconds / 86400;
+        if (interval > 1) {
+            return Math.floor(interval) + " days";
+        }
+        interval = seconds / 3600;
+        if (interval > 1) {
+            return Math.floor(interval) + " hours";
+        }
+        interval = seconds / 60;
+        if (interval > 1) {
+            return Math.floor(interval) + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+    }
+
     render() {
         return (
             <div className="row single-twit">
                 <div className="col-sm user-profile">
-                    <img src={this.props.singleTweet.user.profile} />
+                    <img src={this.props.singleTweet.user.profile_url} alt='User Profile' />
                 </div>
                 <div className="col-sm">
-                    <div><strong>{this.props.singleTweet.user.name}</strong> <span className='user-email'>@{this.props.singleTweet.user.email}</span> <span className='twit-time-ago'>5m</span></div>
+                    <div><strong>{this.props.singleTweet.user.name}</strong> <span className='user-email'>@{this.props.singleTweet.user.name.replaceAll(' ', '').toLowerCase()}</span> <span className='twit-time-ago'>{this.timeAgoCalculate(new Date(this.props.singleTweet.date))}</span></div>
                     <div>{this.props.singleTweet.content}</div>
                 </div>
             </div>

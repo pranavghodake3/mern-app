@@ -13,7 +13,7 @@ class TwitterList extends Component{
     }
 
     componentDidMount(){
-        axios.get('http://localhost:9001/tweets')
+        axios.get('http://localhost:9002/tweets')
         .then((response) => {
             console.log("response: ",response);
             this.setState({tweets: response.data});
@@ -28,7 +28,7 @@ class TwitterList extends Component{
             <div className="TwitterList">
                 {
                     this.state.tweets.map(function (tweet){
-                        return <SingleTwitt singleTweet={tweet} key={tweet.id} />;
+                        return <SingleTwitt singleTweet={tweet} key={tweet._id} />;
                     })
                 }
             </div>

@@ -6,7 +6,10 @@ const ObjectId = Schema.ObjectId;
 const UserSchema = new Schema({
   name: String,
   email: String,
-  profile: String,
+  password: String,
+  profile_url: String,
+  following: [],
+  followers: [],
   date: { type: Date, default: Date.now },
 });
 
