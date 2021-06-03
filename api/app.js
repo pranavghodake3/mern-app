@@ -13,6 +13,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use('/tweets', require('./routes/tweets'));
 app.use('/users', require('./routes/users'));
+app.use('/auth', require('./routes/auth'));
 
 
 // DB Connection

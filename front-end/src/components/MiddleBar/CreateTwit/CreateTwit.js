@@ -7,7 +7,8 @@ class CreateTwit extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            content: ''
+            content: '',
+            loginUserProfile: ''
         }
     }
     handleTweetSubmit = (e) => {
@@ -16,7 +17,15 @@ class CreateTwit extends Component{
         const data = {
             content: this.state.content
         };
-        axios.post('http://localhost:9002/tweets', data)
+        let authData = localStorage.getItem('authData');
+        let headers;
+        if(authData){
+            authData = JSON.parse(authData);
+            headers = { headers: {"Authorization" : "Bearer "+authData.accesstoken} };
+        }
+        
+
+        axios.post('http://localhost:9002/tweets', data, headers)
         .then((res) => {
             console.log('success: ',res.data);
             this.setState({ content: '' });
@@ -28,13 +37,22 @@ class CreateTwit extends Component{
     handleTweetContentChange = (e) => {
         this.setState({ content: e.target.value });
     }
+    componentDidMount(){
+        let authData = localStorage.getItem('authData');
+        if(authData){
+            authData = JSON.parse(authData);
+            this.setState({
+                loginUserProfile : authData.user.profile_url
+            });
+        }
+    }
     
     
     render(){
         return (
             <div className="row create-twit">
                 <div className="col-sm user-profile">
-                    <img src={userProfile} alt='User Profile' />
+                    <img src={this.state.loginUserProfile} alt='User Profile' />
                 </div>
                 <div className="col-sm">
                     <form onSubmit={this.handleTweetSubmit}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import LeftBar from './components/LeftBar/LeftBar';
@@ -13,6 +13,12 @@ class App extends Component {
     return (
       <Router>
         <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/registration">
+            <Registration />
+          </Route>
           <Route path="/">
             <div className="container app">
               <div className="row header-row">
@@ -40,12 +46,6 @@ class App extends Component {
                 </div>
               </div>
             </div>
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/registration">
-            <Registration />
           </Route>
         </Switch>
       </Router>

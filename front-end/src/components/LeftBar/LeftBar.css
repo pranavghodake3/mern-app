@@ -11,3 +11,9 @@ ul.left-menus li{
     list-style: none;
     margin: 20px;
 }
+.login-user-profile{
+    padding-left: 190px;
+}
+img.logged-user-profile{
+    width: 60px;
+}
