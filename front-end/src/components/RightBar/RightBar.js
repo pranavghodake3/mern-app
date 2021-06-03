@@ -4,7 +4,6 @@ class RightBar extends Component {
     render() {
         return (
             <div>
-                Right Bar
             </div>
         );
     }

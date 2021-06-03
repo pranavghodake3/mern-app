@@ -1,11 +1,13 @@
 import React from 'react';
 import './LeftBar.css';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 class LeftBar extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            loginLogoutText: '',
+            isLogged: false,
             name: '',
             profile_url: ''
         }
@@ -15,10 +17,22 @@ class LeftBar extends React.Component{
         if(authData){
             authData = JSON.parse(authData);
             this.setState({
+                isLogged: true,
                 name : authData.user.name,
-                profile_url : authData.user.profile_url
+                profile_url : authData.user.profile_url,
+                loginLogoutText: 'Logout'
+            });
+        }else{
+            this.setState({
+                loginLogoutText: 'Login'
             });
         }
+    }
+    handleLogout = (e) => {
+        localStorage.removeItem('authData');
+        this.setState({
+            loginLogoutText: 'Login'
+        });
     }
     
     render(){
@@ -26,20 +40,22 @@ class LeftBar extends React.Component{
             <div>
                 <div>
                     <ul className="left-menus">
-                        <li><Link to="/login" className="nav-link">Login</Link></li>
                         <li>Explore</li>
                         <li>Notifications</li>
                         <li>Messages</li>
+                        <li><Link to='/login' className="nav-link" onClick={this.handleLogout} className='btn btn-primary'>{this.state.loginLogoutText}</Link></li>
                     </ul>
                 </div>
-                <div className='row login-user-profile'>
-                    <div className='col-sm'>
-                        <img src={this.state.profile_url} alt='Login user profile' className='logged-user-profile' />
+                { this.state.isLogged &&
+                    <div className='row login-user-profile'>
+                        <div className='col-sm'>
+                            <img src={this.state.profile_url} alt='Login user profile' className='logged-user-profile' />
+                        </div>
+                        <div className='col-sm'>
+                        <strong>{this.state.name}</strong> <span className='user-email'>@{this.state.name.replaceAll(' ', '').toLowerCase()}</span>
+                        </div>
                     </div>
-                    <div className='col-sm'>
-                    <strong>{this.state.name}</strong> <span className='user-email'>@{this.state.name.replaceAll(' ', '').toLowerCase()}</span>
-                    </div>
-                </div>
+                }
             </div>
         )
     }

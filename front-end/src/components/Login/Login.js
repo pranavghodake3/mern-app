@@ -1,12 +1,13 @@
 import React from 'react';
 import './login.css';
-import { Link } from 'react-router-dom';
+import { Link, withRouter, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 class Login extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            successMessage: '',
             email: '',
             password: ''
         }
@@ -19,7 +20,13 @@ class Login extends React.Component{
             console.log('Success: ', res.data);
             localStorage.setItem('authData', JSON.stringify(res.data));
             let authData = JSON.parse(localStorage.getItem('authData'));
-        console.log('session authData: ',authData);
+            console.log('session authData: ',authData);
+            this.setState({
+                successMessage: 'Successfull logged in'
+            });
+            //let history = useHistory();
+            //this.props.history.push("/login");
+
         })
         .catch((err) => {
             console.log('Error: ',err);
@@ -37,6 +44,7 @@ class Login extends React.Component{
                 <h2>Login Form</h2>
                 <form onSubmit={this.handleLoginForm} method="post">
                     <div className="container">
+                        <h3>{this.state.successMessage}</h3>
                         <label for="email"><b>Email</b></label>
                         <input type="text" placeholder="Enter Email" name="email" onChange={this.handleInputChange} value={this.state.email} required />
 
@@ -57,3 +65,4 @@ class Login extends React.Component{
 }
 
 export default Login;
+//export default withRouter(Login);

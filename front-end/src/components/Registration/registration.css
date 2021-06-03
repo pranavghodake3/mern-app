@@ -59,3 +59,10 @@ body {
     background-color: #f1f1f1;
     text-align: center;
   }
+  form.register input{
+    margin-bottom: 0px;
+  }
+  form.register .alert{
+    padding: 0px;
+    color: red;
+  }
