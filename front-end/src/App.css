@@ -8,3 +8,6 @@
 .container.app{
     padding-top: 0px;
 }
+.hover{
+    cursor: pointer;
+}

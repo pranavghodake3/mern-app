@@ -32,15 +32,22 @@ class SingleTwitt extends Component {
         }
         return Math.floor(seconds) + " seconds";
     }
+    handleViewOtherUserProfile = () => {
+        this.props.handleViewOtherUserProfile(this.props.singleTweet.user.email);
+    }
 
     render() {
+        var userProfilePicture = this.props.singleTweet.user.profile_url;
+        if(userProfilePicture == ''){
+            userProfilePicture = 'https://picsum.photos/200/300';
+        }
         return (
             <div className="row single-twit">
                 <div className="col-sm user-profile">
-                    <img src={this.props.singleTweet.user.profile_url} alt='User Profile' />
+                    <img src={userProfilePicture} alt='User Profile' />
                 </div>
                 <div className="col-sm">
-                    <div><strong>{this.props.singleTweet.user.name}</strong> <span className='user-email'>@{this.props.singleTweet.user.name.replaceAll(' ', '').toLowerCase()}</span> <span className='twit-time-ago'>{this.timeAgoCalculate(new Date(this.props.singleTweet.date))}</span></div>
+                    <div className='view-user-profile hover' onClick={this.handleViewOtherUserProfile}><strong>{this.props.singleTweet.user.name}</strong> <span className='user-email'>@{this.props.singleTweet.user.name.replaceAll(' ', '').toLowerCase()}</span> <span className='twit-time-ago'>{this.timeAgoCalculate(new Date(this.props.singleTweet.date))}</span></div>
                     <div>{this.props.singleTweet.content}</div>
                 </div>
             </div>

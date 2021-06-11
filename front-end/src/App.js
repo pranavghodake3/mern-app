@@ -9,6 +9,23 @@ import './App.css';
 import logo from './twitter-logo.jpg';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadProfile: false,
+      loginUserEmail: ''
+    }
+    this.middlebarElement = React.createRef();
+  }
+  handleLoadUserProfile = (loginUserEmail) => {
+    console.log('app.js handleLoadProfile loginUserEmail param: '+loginUserEmail);
+    this.setState({
+      loadProfile: true,
+      loginUserEmail: loginUserEmail
+    });
+    this.middlebarElement.current.handleLoadUserProfile(loginUserEmail);
+  }
+  
   render() {
     return (
       <Router>
@@ -19,7 +36,7 @@ class App extends Component {
           <Route path="/registration">
             <Registration />
           </Route>
-          <Route path="/">
+          <Route path={['/', '/profile']}>
             <div className="container app">
               <div className="row header-row">
                 <div className="col-sm hor-column">
@@ -36,10 +53,10 @@ class App extends Component {
               </div>
               <div className="row">
                 <div className="col-sm hor-column">
-                  <LeftBar />
+                  <LeftBar loadProfile={this.handleLoadUserProfile} />
                 </div>
                 <div className="col-sm hor-column">
-                  <MiddleBar />
+                  <MiddleBar ref={this.middlebarElement} handleLoadUserProfile={this.handleLoadUserProfile} />
                 </div>
                 <div className="col-sm hor-column">
                   <RightBar />

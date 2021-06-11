@@ -18,15 +18,10 @@ class Login extends React.Component{
         axios.post('http://localhost:9002/auth/login', this.state)
         .then((res) => {
             console.log('Success: ', res.data);
-            localStorage.setItem('authData', JSON.stringify(res.data));
-            let authData = JSON.parse(localStorage.getItem('authData'));
-            console.log('session authData: ',authData);
+            localStorage.setItem('authData', JSON.stringify(res.data.data));
             this.setState({
                 successMessage: 'Successfull logged in'
             });
-            //let history = useHistory();
-            //this.props.history.push("/login");
-
         })
         .catch((err) => {
             console.log('Error: ',err);

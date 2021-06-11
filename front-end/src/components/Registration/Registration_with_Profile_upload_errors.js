@@ -15,29 +15,43 @@ class Registration extends React.Component{
             name: '',
             email: '',
             password: '',
-            confirm_password: ''
+            confirm_password: '',
+            profile_picture: null
         }
     }
     
     handleRegister = (e) => {
         e.preventDefault();
         if(this.validatedData()){
+            var formData = new FormData();
+            formData.append("profile_picture", this.state.profile_picture);
+            formData.append("newname", 12345);
+            console.warn(this.state.profile_picture);
             let postData = {...this.state};
             delete postData['confirm_password'];
-            postData['profile_url'] = 'http://localhost:9002/images/user2.png';
+            postData['profile_url'] = 'https://picsum.photos/300/300';
             postData['following'] = [];
             postData['followers'] = [];
-            console.log('postData: ',postData);
+            
+            Object.keys(postData).forEach((k) => {
+                formData.append(k, postData[k]);
+            });
             console.log('this.state: ',this.state);
-            axios.post('http://localhost:9002/users', postData)
+            console.log('this.state.profile_picture: ',this.state.profile_picture);
+            console.log('formData: ',formData);
+
+            const config = {     
+                headers: { 'content-type': 'multipart/form-data' }
+            }
+
+            axios.post('http://localhost:9002/users', formData)
             .then((res) => {
                 console.log("Success")
-                Object.keys(this.state).forEach((k) => {
-                    console.log(k + ' - ' + this.state[k]);
+                /*Object.keys(this.state).forEach((k) => {
                     this.setState({
                         [k]: ''
                     });
-                });
+                });*/
                 this.setState({
                     formStatusMessage: 'Registered successfully. Please login now.'
                 });
@@ -49,8 +63,6 @@ class Registration extends React.Component{
     }
 
     validatedData = () => {
-
-
         Object.keys(this.state).forEach((k) => {
             console.log(k + ' - ' + this.state[k]);
         });
@@ -61,25 +73,27 @@ class Registration extends React.Component{
     }
 
     handleFiedChange = (e) => {
-        var stateElementName = e.target.name;
+        var stateElementValue = e.target.value;
         if(e.target.name == 'profile_picture'){
-            stateElementName = e.target.files[0];
+            stateElementValue = e.target.files[0];
+            console.log('handleFieldChange e.target.name: '+e.target.name)
         }
         this.setState({
-            [stateElementName]: e.target.value
+            [e.target.name]: stateElementValue
         });
     }
-    
-    
-    
+
     render(){
         return (
             <div>
-                <form onSubmit={this.handleRegister} className='register'>
+                <form onSubmit={this.handleRegister} className='register' encType="multipart/form-data">
                     <div className="container">
                         <h1>Register</h1>
                         <h2>{this.state.formStatusMessage}</h2>
                         <hr />
+
+                        <label for="profile_picture"><b>Profile Picture</b></label>
+                        <input type="file" name="profile_picture" id="profile_picture" onChange={this.handleFiedChange} required />                        
 
                         <label for="name"><b>Name</b></label>
                         <input type="text" placeholder="Enter Name" name="name" id="name" onChange={this.handleFiedChange} value={this.state.name} required />

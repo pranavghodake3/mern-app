@@ -2,41 +2,16 @@ const express = require('express');
 const router = express.Router();
 var TweetModel = require('../models/TweetModel');
 var UserModel = require('../models/UserModel');
-var jwt = require('jsonwebtoken');
-const secretKey = 'testrandomkey';
+const authService = require('../authService');
 
-router.get('/', (req, res)=>{
+router.get('/', authService.verifyToken, (req, res)=>{
+    //console.log('global path: '+__base)
     TweetModel.find().populate('user').sort({_id: 'desc'}).lean().exec(function (err, tweets) {
         res.status(200).send(tweets);
     });
 })
 
-function verifyToken(req, res, next) {
-    console.log('req.headers: ',req.headers)
-    const bearerHeader = req.headers['authorization'];
-  
-    if (bearerHeader) {
-      const bearer = bearerHeader.split(' ');
-      const bearerToken = bearer[1];
-      console.log('bearer: ',bearer);
-      req.token = bearerToken;
-      jwt.verify(bearerToken, secretKey, function(err, decoded) {
-        if(err){
-            res.status(401).send({
-                accesstoken: 'Invalid accesstoken'
-            });
-        }else{
-            req.user = decoded;
-            next();
-        }
-    });
-    } else {
-      // Forbidden
-      res.sendStatus(403);
-    }
-  }
-
-router.post('/', verifyToken, (req, res)=>{
+router.post('/', authService.verifyToken, (req, res)=>{
     
     //60b7809eafa38a6529f6d70e
     //60b780cbafa38a6529f6d70f

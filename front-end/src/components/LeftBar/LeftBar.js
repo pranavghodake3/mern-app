@@ -1,6 +1,7 @@
 import React from 'react';
 import './LeftBar.css';
 import { Link, Redirect } from "react-router-dom";
+import axios from 'axios'
 
 class LeftBar extends React.Component{
     constructor(props) {
@@ -13,15 +14,23 @@ class LeftBar extends React.Component{
         }
     }
     componentDidMount(){
-        let authData = localStorage.getItem('authData');
+        var authData = localStorage.getItem('authData');
         if(authData){
             authData = JSON.parse(authData);
-            this.setState({
-                isLogged: true,
-                name : authData.user.name,
-                profile_url : authData.user.profile_url,
-                loginLogoutText: 'Logout'
-            });
+            var headers = { headers: {"Authorization" : "Bearer "+authData.accesstoken} };
+            axios.get('http://localhost:9002/auth/profile', headers)
+            .then((res) => {
+                this.loginUserEmail = res.data.email;
+                this.setState({
+                    isLogged: true,
+                    name : res.data.name,
+                    profile_url : res.data.profile_url,
+                    loginLogoutText: 'Logout'
+                });
+            })
+            .catch((err) => {
+                console.log('Error: ',err);
+            })
         }else{
             this.setState({
                 loginLogoutText: 'Login'
@@ -33,6 +42,10 @@ class LeftBar extends React.Component{
         this.setState({
             loginLogoutText: 'Login'
         });
+    }
+    handleViewLoggedinProfile = () => {
+        //console.log('this.loginUserEmail: ',this.loginUserEmail);
+        this.props.loadProfile(this.loginUserEmail);
     }
     
     render(){
@@ -47,11 +60,11 @@ class LeftBar extends React.Component{
                     </ul>
                 </div>
                 { this.state.isLogged &&
-                    <div className='row login-user-profile'>
+                    <div className='row login-user-profile hover' onClick={this.handleViewLoggedinProfile}>
                         <div className='col-sm'>
                             <img src={this.state.profile_url} alt='Login user profile' className='logged-user-profile' />
                         </div>
-                        <div className='col-sm'>
+                        <div className='col-sm view-user-profile' onClick={this.handleViewProfile}>
                         <strong>{this.state.name}</strong> <span className='user-email'>@{this.state.name.replaceAll(' ', '').toLowerCase()}</span>
                         </div>
                     </div>

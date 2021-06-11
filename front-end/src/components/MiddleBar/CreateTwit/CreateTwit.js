@@ -17,32 +17,50 @@ class CreateTwit extends Component{
         const data = {
             content: this.state.content
         };
-        let authData = localStorage.getItem('authData');
-        let headers;
+
+        var authData = localStorage.getItem('authData');
         if(authData){
             authData = JSON.parse(authData);
-            headers = { headers: {"Authorization" : "Bearer "+authData.accesstoken} };
+            var headers = { headers: {"Authorization" : "Bearer "+authData.accesstoken} };
+            axios.get('http://localhost:9002/auth/profile', headers)
+            .then((res) => {
+                axios.post('http://localhost:9002/tweets', data, headers)
+                .then((res) => {
+                    console.log('success: ',res.data);
+                    this.setState({ content: '' });
+                })
+                .catch((err) => {
+                    console.log('Posting tweet having error: ', err)
+                })
+            })
+            .catch((err) => {
+                console.log('Error: ',err);
+            })
+        }else{
+            this.setState({
+                loginLogoutText: 'Login'
+            });
         }
-        
-
-        axios.post('http://localhost:9002/tweets', data, headers)
-        .then((res) => {
-            console.log('success: ',res.data);
-            this.setState({ content: '' });
-        })
-        .catch((err) => {
-            console.log('Posting tweet having error: ', err)
-        })
     }
     handleTweetContentChange = (e) => {
         this.setState({ content: e.target.value });
     }
     componentDidMount(){
-        let authData = localStorage.getItem('authData');
+        var authData = localStorage.getItem('authData');
         if(authData){
             authData = JSON.parse(authData);
+            axios.get('http://localhost:9002/auth/profile')
+            .then((res) => {
+                this.setState({
+                    loginUserProfile : res.data.profile_url
+                });
+            })
+            .catch((err) => {
+                console.log('Error: ',err);
+            })
+        }else{
             this.setState({
-                loginUserProfile : authData.user.profile_url
+                loginLogoutText: 'Login'
             });
         }
     }

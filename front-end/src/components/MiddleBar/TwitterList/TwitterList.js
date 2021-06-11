@@ -22,13 +22,17 @@ class TwitterList extends Component{
             console.log(err)
         })
     }
+    handleViewOtherUserProfile = (email) => {
+        console.log('Called twitter list component: '+email);
+        this.props.handleViewOtherUserProfile(email);
+    }
     
     render (){
         return (
             <div className="TwitterList">
                 {
-                    this.state.tweets.map(function (tweet){
-                        return <SingleTwitt singleTweet={tweet} key={tweet._id} />;
+                    this.state.tweets.map((tweet) => {
+                        return <SingleTwitt singleTweet={tweet} key={tweet._id} handleViewOtherUserProfile={this.handleViewOtherUserProfile} />;
                     })
                 }
             </div>

@@ -1,3 +1,4 @@
+global.__base = __dirname + '/';
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
@@ -6,6 +7,7 @@ const port = 9002;
 const connectionUrl = 'mongodb+srv://pranavghodake:Pranav123@cluster0.kadev.mongodb.net/pranav-twitter?retryWrites=true&w=majority';
 
 // Middlewares
+console.log('Global base path: '+__base)
 app.use(cors());
 app.use(express.static('public'));
 app.use('/images', express.static('images'));
