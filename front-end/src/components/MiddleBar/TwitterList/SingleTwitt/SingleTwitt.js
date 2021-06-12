@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
+import { useParams, Link, withRouter } from 'react-router-dom';
 import './SingleTwitt.css';
 
-class SingleTwitt extends Component {
-    constructor(props) {
-        super(props);
-    }
-    
-    timeAgoCalculate = (date) => {
+const SingleTwitt = (props) => {
+    const timeAgoCalculate = (date) => {
         var seconds = Math.floor((new Date() - date) / 1000);
 
         var interval = seconds / 31536000;
@@ -32,27 +29,27 @@ class SingleTwitt extends Component {
         }
         return Math.floor(seconds) + " seconds";
     }
-    handleViewOtherUserProfile = () => {
-        this.props.handleViewOtherUserProfile(this.props.singleTweet.user.email);
+    const handleViewOtherUserProfile = () => {
+        props.history.push(`/${props.singleTweet.user.email}`);
+        //props.handleViewOtherUserProfile(props.singleTweet.user.email);
     }
 
-    render() {
-        var userProfilePicture = this.props.singleTweet.user.profile_url;
-        if(userProfilePicture == ''){
-            userProfilePicture = 'https://picsum.photos/200/300';
-        }
-        return (
-            <div className="row single-twit">
-                <div className="col-sm user-profile">
-                    <img src={userProfilePicture} alt='User Profile' />
-                </div>
-                <div className="col-sm">
-                    <div className='view-user-profile hover' onClick={this.handleViewOtherUserProfile}><strong>{this.props.singleTweet.user.name}</strong> <span className='user-email'>@{this.props.singleTweet.user.name.replaceAll(' ', '').toLowerCase()}</span> <span className='twit-time-ago'>{this.timeAgoCalculate(new Date(this.props.singleTweet.date))}</span></div>
-                    <div>{this.props.singleTweet.content}</div>
-                </div>
-            </div>
-        );
+    var userProfilePicture = props.singleTweet.user.profile_url;
+    if(userProfilePicture == ''){
+        userProfilePicture = 'https://picsum.photos/200/200';
     }
+    return (
+        <div className="row single-twit">
+            <div className="col-sm user-profile">
+                <img src={userProfilePicture} alt='User Profile' />
+            </div>
+            <div className="col-sm">
+                <Link to={`/${props.singleTweet.user.email}`}>=={props.singleTweet.user.name}==</Link>
+                <div className='view-user-profile hover' onClick={handleViewOtherUserProfile}><strong>{props.singleTweet.user.name}</strong> <span className='user-email'>@{props.singleTweet.user.name.replaceAll(' ', '').toLowerCase()}</span> <span className='twit-time-ago'>{timeAgoCalculate(new Date(props.singleTweet.date))}</span></div>
+                <div>{props.singleTweet.content}</div>
+            </div>
+        </div>
+    );
 }
 
-export default SingleTwitt;
+export default withRouter(SingleTwitt);

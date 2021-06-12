@@ -1,77 +1,55 @@
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import './LeftBar.css';
 import { Link, Redirect } from "react-router-dom";
 import axios from 'axios'
+import UserContext from '../../contexts/UserContext'
 
-class LeftBar extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            loginLogoutText: '',
-            isLogged: false,
-            name: '',
-            profile_url: ''
-        }
-    }
-    componentDidMount(){
-        var authData = localStorage.getItem('authData');
-        if(authData){
-            authData = JSON.parse(authData);
-            var headers = { headers: {"Authorization" : "Bearer "+authData.accesstoken} };
-            axios.get('http://localhost:9002/auth/profile', headers)
-            .then((res) => {
-                this.loginUserEmail = res.data.email;
-                this.setState({
-                    isLogged: true,
-                    name : res.data.name,
-                    profile_url : res.data.profile_url,
-                    loginLogoutText: 'Logout'
-                });
-            })
-            .catch((err) => {
-                console.log('Error: ',err);
-            })
-        }else{
-            this.setState({
-                loginLogoutText: 'Login'
-            });
-        }
-    }
-    handleLogout = (e) => {
+const LeftBar = (props) =>{
+    const [state, setState] = useState({
+        loginLogoutText: 'Login',
+        isLogged: false,
+        name: '',
+        profile_url: ''
+    });
+    var loginUserEmail = '';
+
+    function handleLogout() {
         localStorage.removeItem('authData');
-        this.setState({
-            loginLogoutText: 'Login'
+        setState((prevState) => {
+            return {
+                ...prevState,
+                loginLogoutText: 'Login'
+            }
         });
     }
-    handleViewLoggedinProfile = () => {
-        //console.log('this.loginUserEmail: ',this.loginUserEmail);
-        this.props.loadProfile(this.loginUserEmail);
+    function handleViewLoggedinProfile(){
+        props.loadProfile(loginUserEmail);
     }
-    
-    render(){
-        return (
+
+    var currentUser = useContext(UserContext);
+
+    return (
+        <div>
             <div>
-                <div>
-                    <ul className="left-menus">
-                        <li>Explore</li>
-                        <li>Notifications</li>
-                        <li>Messages</li>
-                        <li><Link to='/login' className="nav-link" onClick={this.handleLogout} className='btn btn-primary'>{this.state.loginLogoutText}</Link></li>
-                    </ul>
-                </div>
-                { this.state.isLogged &&
-                    <div className='row login-user-profile hover' onClick={this.handleViewLoggedinProfile}>
-                        <div className='col-sm'>
-                            <img src={this.state.profile_url} alt='Login user profile' className='logged-user-profile' />
-                        </div>
-                        <div className='col-sm view-user-profile' onClick={this.handleViewProfile}>
-                        <strong>{this.state.name}</strong> <span className='user-email'>@{this.state.name.replaceAll(' ', '').toLowerCase()}</span>
-                        </div>
-                    </div>
-                }
+                <ul className="left-menus">
+                    <li>Explore</li>
+                    <li>Notifications</li>
+                    <li>Messages</li>
+                    <li><Link to='/login' className="nav-link" onClick={handleLogout} className='btn btn-primary'>{state.loginLogoutText}</Link></li>
+                </ul>
             </div>
-        )
-    }
+            { currentUser &&
+                <div className='row login-user-profile hover' onClick={handleViewLoggedinProfile}>
+                    <div className='col-sm'>
+                        <img src={currentUser.profile_url} alt='Login user profile' className='logged-user-profile' />
+                    </div>
+                    <div className='col-sm view-user-profile'>
+                    <strong>{currentUser.name}</strong> <span className='user-email'>@{currentUser.name.replaceAll(' ', '').toLowerCase()}</span>
+                    </div>
+                </div>
+            }
+        </div>
+    )
 }
 
 export default LeftBar;

@@ -1,63 +1,71 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './login.css';
-import { Link, withRouter, useHistory } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 
-class Login extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            successMessage: '',
-            email: '',
-            password: ''
-        }
-    }
+function Login(props) {
+    const [formDetails, setState] = useState({
+        email: '',
+        password: '',
+        formStatusMessage: ''
+    });
 
-    handleLoginForm = (e) => {
+    function handleInputChange(e){
+        setState(
+            prev => ({ 
+                ...prev,
+                [e.target.name]: e.target.value
+        }))
+    }
+    
+    function handleLoginForm(e){
         e.preventDefault();
-        axios.post('http://localhost:9002/auth/login', this.state)
+        console.log('formDetails: ',formDetails);
+        axios.post('http://localhost:9002/auth/login', formDetails)
         .then((res) => {
-            console.log('Success: ', res.data);
+            console.log('Login Success res.data: ', res.data);
             localStorage.setItem('authData', JSON.stringify(res.data.data));
-            this.setState({
-                successMessage: 'Successfull logged in'
-            });
+            var headers = { headers: {"Authorization" : "Bearer "+res.data.data.accesstoken} };
+            axios.get('http://localhost:9002/auth/profile', headers)
+            .then((res) => {
+                console.log('Profile call res.data: ',res.data);
+                props.propToSetCurrentUser(res.data);
+                props.history.push('/');
+            })
+            .catch((err) => {
+                console.log('Error: ',err);
+            })
         })
         .catch((err) => {
             console.log('Error: ',err);
+            setState((prevState) => {
+                return {...prevState, formStatusMessage: 'Invalid credentials'};
+            });
         })
     }
 
-    handleInputChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-    render(){
-        return (
-            <div className='container'>
-                <h2>Login Form</h2>
-                <form onSubmit={this.handleLoginForm} method="post">
-                    <div className="container">
-                        <h3>{this.state.successMessage}</h3>
-                        <label for="email"><b>Email</b></label>
-                        <input type="text" placeholder="Enter Email" name="email" onChange={this.handleInputChange} value={this.state.email} required />
+    return (
+        <div>
+            <h2>Login Form</h2>
+            <form onSubmit={handleLoginForm} method="post">
+                <div className="container">
+                    <h3>{formDetails.formStatusMessage}</h3>
+                    <label htmlFor="email"><b>Email</b></label>
+                    <input type="text" placeholder="Enter Email" name="email" onChange={handleInputChange}  value={formDetails.email} required />
 
-                        <label for="password"><b>Password</b></label>
-                        <input type="password" placeholder="Enter Password" name="password" onChange={this.handleInputChange} value={this.state.password} required />
-                            
-                        <button type="submit">Login</button>
-                    </div>
+                    <label htmlFor="password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" value={formDetails.password} onChange={handleInputChange}  required />
+                        
+                    <button type="submit">Login</button>
+                </div>
 
-                    <div className="container">
-                        <Link to='/' className="cancelbtn">Cancel</Link>
-                        <Link to='/registration' className='btn btn-primary'>Don't have an account ?</Link>
-                    </div>
-                </form>
-            </div>
-        )
-    }
+                <div className="container">
+                    <Link to='/' className="cancelbtn">Cancel</Link>
+                    <Link to='/registration' className='btn btn-primary'>Don't have an account ?</Link>
+                </div>
+            </form>
+        </div>
+    )
 }
 
-export default Login;
-//export default withRouter(Login);
+export default withRouter(Login);
