@@ -14,21 +14,30 @@ const Profile = (props) => {
     const {username} = useParams();
     console.log('username: ', username);
     if(!state.loadProfile){
-        axios.post('http://localhost:9002/users/byemail', {email: username})
-        .then((res) => {
+        if(username == userContextData.user.email){
             setState((prevState) => {
                 return {
                     ...prevState,
                     loadProfile: true,
-                    user: res.data.user,
-                    followUnfollowText: userContextData.isLogged && userContextData.user.following.includes(res.data.user._id) ? 'Unfollow' : 'Follow'
+                    user: userContextData.user
                 }
             });
-            //console.log('this.state: ',this.state);
-        })
-        .catch((err) => {
-            console.log('Err: ', err);
-        })
+        }else{
+            axios.post('http://localhost:9002/users/byemail', {email: username})
+            .then((res) => {
+                setState((prevState) => {
+                    return {
+                        ...prevState,
+                        loadProfile: true,
+                        user: res.data.user,
+                        followUnfollowText: userContextData.isLogged && userContextData.user.following.includes(res.data.user._id) ? 'Unfollow' : 'Follow'
+                    }
+                });
+            })
+            .catch((err) => {
+                console.log('Err: ', err);
+            })
+        }
     }
 
     const handleDoFollowUnfollow = () => {
@@ -59,9 +68,12 @@ const Profile = (props) => {
                     <div className='profile-picture'>
                         <img src={state.user.profile_url} alt='Profile-picture' />
                     </div>
-                    <div className='follow-unfollow'>
-                        <button type='button' className='btn btn-info' onClick={handleDoFollowUnfollow}>{state.followUnfollowText}</button>
-                    </div>
+                    {
+                        state.user.email != userContextData.user.email && 
+                        <div className='follow-unfollow'>
+                            <button type='button' className='btn btn-info' onClick={handleDoFollowUnfollow}>{state.followUnfollowText}</button>
+                        </div>
+                    }
                     <div className='user-basic-details'>
                     <strong>{state.user.name}</strong> <span className='user-email'>@{state.user.name.replaceAll(' ', '').toLowerCase()}</span>
                     </div>
