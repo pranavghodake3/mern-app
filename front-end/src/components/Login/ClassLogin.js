@@ -1,6 +1,6 @@
 import React from 'react';
 import './login.css';
-import { Link, withRouter, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -63,4 +63,3 @@ class ClassLogin extends React.Component{
 }
 
 export default Login;
-//export default withRouter(Login);

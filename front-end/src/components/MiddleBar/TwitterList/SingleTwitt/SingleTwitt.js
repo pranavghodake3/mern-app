@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { useParams, Link, withRouter } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import './SingleTwitt.css';
 
 const SingleTwitt = (props) => {
+    const dataParams = useParams();
+    console.log('Single tweet dataParams: ',dataParams);
     const timeAgoCalculate = (date) => {
         var seconds = Math.floor((new Date() - date) / 1000);
 
@@ -29,10 +31,6 @@ const SingleTwitt = (props) => {
         }
         return Math.floor(seconds) + " seconds";
     }
-    const handleViewOtherUserProfile = () => {
-        props.history.push(`/${props.singleTweet.user.email}`);
-        //props.handleViewOtherUserProfile(props.singleTweet.user.email);
-    }
 
     var userProfilePicture = props.singleTweet.user.profile_url;
     if(userProfilePicture == ''){
@@ -44,12 +42,15 @@ const SingleTwitt = (props) => {
                 <img src={userProfilePicture} alt='User Profile' />
             </div>
             <div className="col-sm">
-                <Link to={`/${props.singleTweet.user.email}`}>=={props.singleTweet.user.name}==</Link>
-                <div className='view-user-profile hover' onClick={handleViewOtherUserProfile}><strong>{props.singleTweet.user.name}</strong> <span className='user-email'>@{props.singleTweet.user.name.replaceAll(' ', '').toLowerCase()}</span> <span className='twit-time-ago'>{timeAgoCalculate(new Date(props.singleTweet.date))}</span></div>
+                <Link to={`/${props.singleTweet.user.email}`} className='view-user-profile hover'>
+                    <strong className='name'>{props.singleTweet.user.name}</strong>
+                    <span className='user-email'>@{props.singleTweet.user.name.replaceAll(' ', '').toLowerCase()}</span>
+                    <span className='twit-time-ago'>{timeAgoCalculate(new Date(props.singleTweet.date))}</span>
+                </Link>
                 <div>{props.singleTweet.content}</div>
             </div>
         </div>
     );
 }
 
-export default withRouter(SingleTwitt);
+export default SingleTwitt;

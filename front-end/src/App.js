@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route, useHistory } from "react-router-dom";
 import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
@@ -9,13 +9,15 @@ import "./App.css";
 import logo from "./twitter-logo.jpg";
 import axios from 'axios';
 import UserContext from './contexts/UserContext';
+import Welcome from './components/Welcome/Welcome';
 
 //const ThemeContext = React.createContext('light');
 
 
 
 const App = (props) => {
-  const history = useHistory();
+  const userContextData = useContext(UserContext);
+  console.log('App userContextData: ',userContextData);
   // constructor(props) {
   //   super(props);
   //   this.state = {
@@ -62,51 +64,50 @@ const App = (props) => {
 
   
   return (
-    <Router history={history}>
-      <UserContext.Provider value={currentUser}>
-        <Switch>
-          <Route path="/login">
-            <Login propToSetCurrentUser={handleToSetCurrentUser} />
-          </Route>
-          <Route path="/registration">
-            <Registration />
-          </Route>
-          <Route path={["/:handle"]}>
-              HHHHH
-          </Route>
-          <Route path={["/", "/profile"]}>
-            <div className="container app">
-              <div className="row header-row">
-                <div className="col-sm hor-column">
-                  <div className="logo-div">
-                    <img className="logo" src={logo} alt="logo" />
-                  </div>
-                </div>
-                <div className="col-sm hor-column">Home</div>
-                <div className="col-sm hor-column">
-                  <input type="text" className="search" placeholder="Search" />
+      <Switch>
+        <Route path='/' exact>
+          <Welcome />
+        </Route>
+        <Route path="/login" exact>
+          <Login propToSetCurrentUser={handleToSetCurrentUser} />
+        </Route>
+        <Route path="/register" exact>
+          <Registration />
+        </Route>
+        <Route path={['/home', '/:username']} exact>
+          <div className="container app">
+            <div className="row header-row">
+              <div className="col-sm hor-column">
+                <div className="logo-div">
+                  <img className="logo" src={logo} alt="logo" />
                 </div>
               </div>
-              <div className="row">
-                <div className="col-sm hor-column">
-                  <LeftBar loadProfile='' /*loadProfile={this.handleLoadUserProfile}*/ />
-                </div>
-                <div className="col-sm hor-column">
-                  {/* <MiddleBar
-                    ref={this.middlebarElement}
-                    handleLoadUserProfile={this.handleLoadUserProfile}
-                  /> */}
-                  <MiddleBar />
-                </div>
-                <div className="col-sm hor-column">
-                  <RightBar />
-                </div>
+              <div className="col-sm hor-column">Home</div>
+              <div className="col-sm hor-column">
+                <input type="text" className="search" placeholder="Search" />
               </div>
             </div>
-          </Route>
-        </Switch>
-      </UserContext.Provider>
-    </Router>
+            <div className="row">
+              <div className="col-sm hor-column">
+                <LeftBar loadProfile='' /*loadProfile={this.handleLoadUserProfile}*/ />
+              </div>
+              <div className="col-sm hor-column">
+                {/* <MiddleBar
+                  ref={this.middlebarElement}
+                  handleLoadUserProfile={this.handleLoadUserProfile}
+                /> */}
+                <MiddleBar />
+              </div>
+              <div className="col-sm hor-column">
+                <RightBar />
+              </div>
+            </div>
+          </div>
+        </Route>
+        <Route path='*' exact>
+            404 Not Found
+        </Route>
+      </Switch>
   );
 };
 

@@ -1,9 +1,13 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import './login.css';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
+import UserContext from '../../contexts/UserContext';
 
 function Login(props) {
+    const history = useHistory();
+    const userContextData = useContext(UserContext);
+    console.log('Login userContextData: ',userContextData);
     const [formDetails, setState] = useState({
         email: '',
         password: '',
@@ -29,8 +33,9 @@ function Login(props) {
             axios.get('http://localhost:9002/auth/profile', headers)
             .then((res) => {
                 console.log('Profile call res.data: ',res.data);
-                props.propToSetCurrentUser(res.data);
-                props.history.push('/');
+                //props.propToSetCurrentUser(res.data);
+                userContextData.setUserObject(res.data);
+                history.replace('/home');
             })
             .catch((err) => {
                 console.log('Error: ',err);
@@ -68,4 +73,4 @@ function Login(props) {
     )
 }
 
-export default withRouter(Login);
+export default Login;

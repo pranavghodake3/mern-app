@@ -1,0 +1,7 @@
+.text-center.bg-image {
+  background-image: url("https://mdbcdn.b-cdn.net/img/new/slides/041.jpg");
+  height: 400px;
+}
+text-center.bg-image .mask {
+  background-color: rgba(0, 0, 0, 0.6);
+}

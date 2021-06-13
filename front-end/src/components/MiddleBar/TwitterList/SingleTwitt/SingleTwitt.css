@@ -1,14 +1,23 @@
-.single-twit .user-profile, .create-twit .user-profile{
-    flex: 0.1;
+.single-twit .user-profile,
+.create-twit .user-profile {
+  flex: 0.1;
 }
-.single-twit .user-profile img, .create-twit .user-profile img{
-    width: 35px;
-    border-radius: 15px;
+.single-twit .user-profile img,
+.create-twit .user-profile img {
+  width: 35px;
+  border-radius: 15px;
 }
 .row.single-twit {
-    padding: 10px 0px;
-    border: 1px solid #f1f1f1;
+  padding: 10px 0px;
+  border: 1px solid #f1f1f1;
 }
-span.user-email, span.twit-time-ago {
-    color: #808080;
+span.user-email,
+span.twit-time-ago {
+  color: #808080;
+}
+.view-user-profile {
+  text-decoration: none;
+}
+.view-user-profile strong.name {
+  color: #000;
 }

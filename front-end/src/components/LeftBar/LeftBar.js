@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react';
 import './LeftBar.css';
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import axios from 'axios'
 import UserContext from '../../contexts/UserContext'
 
 const LeftBar = (props) =>{
+    const history = useHistory();
     const [state, setState] = useState({
         loginLogoutText: 'Login',
         isLogged: false,
@@ -15,38 +16,35 @@ const LeftBar = (props) =>{
 
     function handleLogout() {
         localStorage.removeItem('authData');
-        setState((prevState) => {
-            return {
-                ...prevState,
-                loginLogoutText: 'Login'
-            }
-        });
+        history.replace('/login');
     }
     function handleViewLoggedinProfile(){
         props.loadProfile(loginUserEmail);
     }
 
-    var currentUser = useContext(UserContext);
+    var userContextData = useContext(UserContext);
+    console.log('LeftBar userContextData: ', userContextData);
 
     return (
         <div>
             <div>
                 <ul className="left-menus">
+                    <li><Link to='/home'>Home</Link></li>
                     <li>Explore</li>
                     <li>Notifications</li>
                     <li>Messages</li>
-                    <li><Link to='/login' className="nav-link" onClick={handleLogout} className='btn btn-primary'>{state.loginLogoutText}</Link></li>
+                    <li><button type='button' onClick={handleLogout} className='btn btn-primary' >{userContextData.isLogged ? 'Logout': 'Login'}</button></li>
                 </ul>
             </div>
-            { currentUser &&
-                <div className='row login-user-profile hover' onClick={handleViewLoggedinProfile}>
+            { userContextData.isLogged &&
+                <Link className='row login-user-profile hover' to={`/${userContextData.user.email}`}>
                     <div className='col-sm'>
-                        <img src={currentUser.profile_url} alt='Login user profile' className='logged-user-profile' />
+                        <img src={userContextData.user.profile_url} alt='Login user profile' className='logged-user-profile' />
                     </div>
                     <div className='col-sm view-user-profile'>
-                    <strong>{currentUser.name}</strong> <span className='user-email'>@{currentUser.name.replaceAll(' ', '').toLowerCase()}</span>
+                    <strong>{userContextData.user.name}</strong> <span className='user-email'>@{userContextData.user.name.replaceAll(' ', '').toLowerCase()}</span>
                     </div>
-                </div>
+                </Link>
             }
         </div>
     )

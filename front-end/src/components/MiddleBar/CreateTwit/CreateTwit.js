@@ -7,8 +7,8 @@ import UserContext from '../../../contexts/UserContext'
 const CreateTwit = (props) => {
     const [tweetContent, setTweetContent] = useState('');
 
-    const currentUser = useContext(UserContext);
-    console.log('CreateTwit currentUser: ',currentUser);
+    const userContextData = useContext(UserContext);
+    console.log('CreateTwit userContextData: ',userContextData);
 
     const handleTweetSubmit = (e) => {
         e.preventDefault();
@@ -34,7 +34,7 @@ const CreateTwit = (props) => {
     return (
         <div className="row create-twit">
             <div className="col-sm user-profile">
-                <img src={currentUser.profile_url} alt='User Profile' />
+                <img src={userContextData.user.profile_url} alt='User Profile' />{userContextData.user.name}
             </div>
             <div className="col-sm">
                 <form onSubmit={handleTweetSubmit}>
