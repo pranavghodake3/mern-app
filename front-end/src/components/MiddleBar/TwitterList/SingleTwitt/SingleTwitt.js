@@ -42,7 +42,7 @@ const SingleTwitt = (props) => {
                 <img src={userProfilePicture} alt='User Profile' />
             </div>
             <div className="col-sm">
-                <Link to={`/${props.singleTweet.user.email}`} className='view-user-profile hover'>
+                <Link to={`/profile/${props.singleTweet.user.email}`} className='view-user-profile hover'>
                     <strong className='name'>{props.singleTweet.user.name}</strong>
                     <span className='user-email'>@{props.singleTweet.user.name.replaceAll(' ', '').toLowerCase()}</span>
                     <span className='twit-time-ago'>{timeAgoCalculate(new Date(props.singleTweet.date))}</span>

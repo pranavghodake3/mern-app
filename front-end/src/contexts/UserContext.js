@@ -1,24 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
-const UserContext = React.createContext(null);
-
-export const UserContextProvider = (props) => {
-
-    const [userObject, setUserObject] = useState(null);
-
-    const contextValue = {
-        isLogged: userObject == null ? false : true,
-        user: userObject,
-        setUserObject: setUserObject
-    }
-
-
-
-    return (
-     <UserContext.Provider value={contextValue}>
-         {props.children}
-     </UserContext.Provider>   
-    )
-}
+const UserContext = React.createContext();
 
 export default UserContext;

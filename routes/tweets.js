@@ -12,15 +12,21 @@ router.get('/', authService.verifyToken, (req, res)=>{
 })
 
 router.post('/', authService.verifyToken, (req, res)=>{
-    
-    var tweet_instance = new TweetModel({
-        content: req.body.content,
-        user: req.loggedInUser
-    });
-    //console.log('tweet_instance: ',tweet_instance);
-    tweet_instance.save(function (err) {
-        if (err) return handleError(err);
-        res.send(req.body);
+    UserModel.findOne({_id: req.loggedInUser._id}).lean().
+    then((user) => {
+        if(!user){
+            res.status(401).send({'success': false, 'message': 'Invalid credentials'});
+        }else{
+            var tweet_instance = new TweetModel({
+                content: req.body.content,
+                user: user
+            });
+            //console.log('tweet_instance: ',tweet_instance);
+            tweet_instance.save(function (err) {
+                if (err) return handleError(err);
+                res.send(req.body);
+            });
+        }
     });
 })
 

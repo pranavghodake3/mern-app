@@ -28,9 +28,9 @@ exports.verifyToken = (req, res, next) => {
     }
 }
 
-exports.createToken = (userObject) => {
+exports.createToken = (encodedData) => {
     return {
         expiresIn: Config.expiresIn,
-        accesstoken: jwt.sign(userObject, Config.secretKey, {expiresIn: Config.expiresIn})
+        accesstoken: jwt.sign(encodedData, Config.secretKey, {expiresIn: Config.expiresIn})
     }
 }

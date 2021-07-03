@@ -16,13 +16,13 @@ const MiddleBar = (props) => {
 
     return (
         <Switch>
-            <Route path='/home' exact>
+            <Route path='/' exact>
                 <div>
                     { userContextData.isLogged && <CreateTwit /> }
                     <TwitterList handleViewOtherUserProfile='' />
                 </div>
             </Route>
-            <Route path='/:username' exact>
+            <Route path='/profile/:username' exact>
                 <Profile loadProfile={true} loginUserEmail={handle} />
             </Route>
         </Switch>
